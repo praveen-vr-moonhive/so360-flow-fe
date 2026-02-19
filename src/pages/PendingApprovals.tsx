@@ -89,7 +89,7 @@ export const PendingApprovals: React.FC = () => {
     if (loading) {
         return (
             <div className="min-h-screen bg-slate-950 p-8">
-                <div className="max-w-6xl mx-auto">
+                <div>
                     <div className="animate-pulse space-y-4">
                         <div className="h-10 bg-slate-800 rounded w-64"></div>
                         {[1, 2, 3].map((i) => (
@@ -104,7 +104,7 @@ export const PendingApprovals: React.FC = () => {
     if (error) {
         return (
             <div className="min-h-screen bg-slate-950 p-8">
-                <div className="max-w-6xl mx-auto">
+                <div>
                     <div className="bg-red-900/20 border border-red-500/30 rounded-lg p-6">
                         <p className="text-red-400">{error}</p>
                         <button
@@ -121,7 +121,7 @@ export const PendingApprovals: React.FC = () => {
 
     return (
         <div className="min-h-screen bg-slate-950 p-8">
-            <div className="max-w-6xl mx-auto">
+            <div>
                 {/* Header */}
                 <div className="mb-8">
                     <h1 className="text-3xl font-bold text-slate-100 mb-2">Pending Approvals</h1>

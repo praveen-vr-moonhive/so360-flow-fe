@@ -120,7 +120,7 @@ export const FlowBuilder = () => {
 
     return (
         <div className="min-h-screen bg-slate-950 p-6">
-            <div className="max-w-5xl mx-auto">
+            <div>
                 <div className="flex items-center justify-between mb-8">
                     <button
                         onClick={() => navigate('/flow')}

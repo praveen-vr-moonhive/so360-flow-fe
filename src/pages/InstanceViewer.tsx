@@ -90,7 +90,7 @@ export const InstanceViewer = () => {
     if (loading) {
         return (
             <div className="min-h-screen bg-slate-950 p-6">
-                <div className="max-w-6xl mx-auto">
+                <div>
                     <div className="flex items-center justify-center py-12">
                         <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-blue-500 border-r-transparent"></div>
                     </div>
@@ -102,7 +102,7 @@ export const InstanceViewer = () => {
     if (error || !context) {
         return (
             <div className="min-h-screen bg-slate-950 p-6">
-                <div className="max-w-6xl mx-auto">
+                <div>
                     <button
                         onClick={() => navigate('/flow/instances')}
                         className="mb-6 text-slate-400 hover:text-slate-100 flex items-center gap-2"
@@ -123,7 +123,7 @@ export const InstanceViewer = () => {
 
     return (
         <div className="min-h-screen bg-slate-950 p-6">
-            <div className="max-w-6xl mx-auto space-y-6">
+            <div className="space-y-6">
                 {/* Header */}
                 <div className="flex items-center justify-between">
                     <button

@@ -16,18 +16,20 @@ import type {
 } from '../types/flow';
 
 const api = axios.create({
-    baseURL: '/flow-api',
+    baseURL: '/v1/flow',
 });
 
-// Interceptor to inject tenant/org headers
+// Interceptor to inject tenant/org/auth headers
 api.interceptors.request.use((config) => {
     const tenantId = localStorage.getItem('currentTenantId');
     const orgId = localStorage.getItem('currentOrgId');
     const userId = localStorage.getItem('userId');
+    const token = localStorage.getItem('flowAuthToken');
 
     if (tenantId) config.headers['X-Tenant-Id'] = tenantId;
     if (orgId) config.headers['X-Org-Id'] = orgId;
     if (userId) config.headers['X-User-Id'] = userId;
+    if (token) config.headers['Authorization'] = `Bearer ${token}`;
 
     return config;
 });
@@ -39,6 +41,9 @@ export const flowApi = {
 
     getFlowDefinitions: (moduleCode?: string) =>
         api.get<FlowDefinition[]>('/definitions', { params: { module_code: moduleCode } }),
+    getAllInstances: (params?: { entity_type?: string; status?: string; limit?: number; offset?: number }) =>
+        api.get<{ data: FlowInstance[]; total: number; limit: number; offset: number }>('/instances', { params }),
+
 
     getFlowDefinition: (flowId: string) =>
         api.get<FlowDefinition>(`/definitions/${flowId}`),

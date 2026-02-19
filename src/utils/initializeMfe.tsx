@@ -6,10 +6,12 @@ export const MfeShellInitializer = ({ children }: { children: React.ReactNode })
     const [isSynced, setIsSynced] = useState(false);
 
     useEffect(() => {
-        if (shell?.currentTenant?.id && shell?.currentOrg?.id) {
+        const accessToken = (shell as unknown as { accessToken?: string })?.accessToken;
+        if (shell?.currentTenant?.id && shell?.currentOrg?.id && accessToken) {
             // Store in localStorage for axios interceptor
             localStorage.setItem('currentTenantId', shell.currentTenant.id);
             localStorage.setItem('currentOrgId', shell.currentOrg.id);
+            localStorage.setItem('flowAuthToken', accessToken);
             if (shell.user?.id) {
                 localStorage.setItem('userId', shell.user.id);
             }
