@@ -16,7 +16,7 @@ import type {
 } from '../types/flow';
 
 const api = axios.create({
-    baseURL: '/v1/flow',
+    baseURL: '/flow-api',
 });
 
 // Interceptor to inject tenant/org/auth headers
