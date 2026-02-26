@@ -4,6 +4,7 @@ import { ArrowLeft, Activity, GitBranch, Database, History } from 'lucide-react'
 import { flowApi } from '../services/flowApi';
 import { ApprovalHistory } from '../components/ApprovalHistory';
 import type { FlowInstance, FlowHistory, FlowDefinition } from '../types/flow';
+import { FlowStateGraph } from '../components/FlowStateGraph';
 
 interface InstanceContext {
     instance: FlowInstance;
@@ -187,6 +188,22 @@ export const InstanceViewer = () => {
                         )}
                     </div>
                 </div>
+
+                {/* State Machine Visualization */}
+                {flowDef?.states && flowDef.states.length > 0 && (
+                    <div className="bg-slate-900/50 border border-slate-800 rounded-xl p-6">
+                        <h2 className="text-lg font-semibold text-slate-100 flex items-center gap-2 mb-4">
+                            <GitBranch className="w-5 h-5 text-blue-500" />
+                            State Machine
+                        </h2>
+                        <FlowStateGraph
+                            states={flowDef.states}
+                            transitions={flowDef.transitions || []}
+                            currentState={context.instance.current_state}
+                            visitedStates={context.history?.map((h: any) => h.to_state) || []}
+                        />
+                    </div>
+                )}
 
                 {/* Current State */}
                 <div className="bg-slate-900/50 border border-slate-800 rounded-xl p-6">

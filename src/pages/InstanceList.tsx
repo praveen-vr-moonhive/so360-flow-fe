@@ -6,7 +6,7 @@ import type { FlowInstance, FlowDefinition } from '../types/flow';
 
 const PAGE_SIZE = 20;
 
-type StatusFilter = 'all' | 'active' | 'completed';
+type StatusFilter = 'all' | 'active' | 'completed' | 'cancelled' | 'suspended';
 
 export const InstanceList = () => {
     const navigate = useNavigate();
@@ -107,7 +107,7 @@ export const InstanceList = () => {
                         <div>
                             <label className="text-xs text-slate-500 block mb-1.5">Status</label>
                             <div className="flex gap-1">
-                                {(['all', 'active', 'completed'] as StatusFilter[]).map((s) => (
+                                {(['all', 'active', 'completed', 'cancelled', 'suspended'] as StatusFilter[]).map((s) => (
                                     <button
                                         key={s}
                                         onClick={() => setStatusFilter(s)}
@@ -125,13 +125,25 @@ export const InstanceList = () => {
                         {/* Entity type filter */}
                         <div>
                             <label className="text-xs text-slate-500 block mb-1.5">Entity Type</label>
-                            <input
-                                type="text"
+                            <select
                                 value={entityTypeFilter}
                                 onChange={(e) => setEntityTypeFilter(e.target.value)}
-                                placeholder="e.g. lead, deal, invoice"
-                                className="bg-slate-800 border border-slate-700 rounded px-3 py-1.5 text-slate-100 text-xs placeholder-slate-500 focus:outline-none focus:border-blue-500"
-                            />
+                                className="bg-slate-800 border border-slate-700 rounded px-3 py-1.5 text-slate-100 text-xs focus:outline-none focus:border-blue-500"
+                            >
+                                <option value="">All Types</option>
+                                <option value="lead">CRM - Lead</option>
+                                <option value="deal">CRM - Deal</option>
+                                <option value="task">Projects - Task</option>
+                                <option value="project">Projects - Project</option>
+                                <option value="expense">Accounting - Expense</option>
+                                <option value="invoice">Accounting - Invoice</option>
+                                <option value="purchase_requisition">Procurement - PR</option>
+                                <option value="purchase_order">Procurement - PO</option>
+                                <option value="timesheet_batch">Timesheet - Batch</option>
+                                <option value="order">Daily Store - Order</option>
+                                <option value="support_ticket">Support - Ticket</option>
+                                <option value="fulfillment_order">Fulfillment - Order</option>
+                            </select>
                         </div>
                     </div>
                 </div>

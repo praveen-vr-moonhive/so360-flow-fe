@@ -5,6 +5,10 @@ export interface FlowState {
     color?: string;
     is_initial?: boolean;
     is_terminal?: boolean;
+    timeout_seconds?: number;
+    escalation_transition?: string;
+    on_enter?: { side_effects: string[] };
+    on_exit?: { side_effects: string[] };
 }
 
 export interface FlowTransition {
@@ -15,7 +19,9 @@ export interface FlowTransition {
     description?: string;
     allowed_roles?: string[];
     conditions?: Record<string, any>;
-    requires_approval?: boolean; // NEW: Approval system integration
+    requires_approval?: boolean;
+    condition_expression?: Record<string, any>;
+    side_effects?: string[];
 }
 
 export interface FlowDefinition {
@@ -29,6 +35,11 @@ export interface FlowDefinition {
     transitions: FlowTransition[];
     metadata?: Record<string, any>;
     is_active: boolean;
+    is_draft?: boolean;
+    is_system_flow?: boolean;
+    version?: number;
+    subscription_tier_required?: 'starter' | 'growth' | 'enterprise';
+    industry_tags?: string[];
     created_by: string;
     created_at: string;
     updated_at: string;
@@ -42,11 +53,16 @@ export interface FlowInstance {
     entity_type: string;
     entity_id: string;
     current_state: string;
+    status?: 'active' | 'completed' | 'cancelled' | 'suspended';
     context: Record<string, any>;
+    timer_state?: Record<string, any>;
+    entity_data?: Record<string, any>;
     started_by: string;
     started_at: string;
     completed_by?: string;
     completed_at?: string;
+    cancelled_at?: string;
+    cancel_reason?: string;
     created_at: string;
     updated_at: string;
     flows?: FlowDefinition;
@@ -72,6 +88,9 @@ export interface CreateFlowDefinitionDto {
     states: FlowState[];
     transitions: FlowTransition[];
     metadata?: Record<string, any>;
+    is_draft?: boolean;
+    subscription_tier_required?: 'starter' | 'growth' | 'enterprise';
+    industry_tags?: string[];
 }
 
 export interface StartFlowInstanceDto {
@@ -106,7 +125,7 @@ export interface ApprovalPolicy {
 export interface ApprovalRule {
     id: string;
     policy_id: string;
-    condition_expression: any; // JSON condition tree
+    condition_expression: any;
     approval_mode: 'SEQUENTIAL' | 'PARALLEL';
     priority: number;
     is_active: boolean;
@@ -123,6 +142,8 @@ export interface ApprovalStep {
     sla_hours?: number;
     escalation_role?: string;
     can_delegate: boolean;
+    delegation_expiry_hours?: number;
+    parallel_threshold?: number;
     created_at: string;
 }
 

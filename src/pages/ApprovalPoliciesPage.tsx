@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Plus, Trash2, ChevronDown, ChevronUp, ArrowLeft, Save } from 'lucide-react';
 import { flowApi } from '../services/flowApi';
 
-interface ApprovalStep {
+interface LocalApprovalStep {
     step_order: number;
     approver_type: 'ROLE' | 'USER' | 'DYNAMIC';
     approver_config: Record<string, any>;
@@ -11,13 +11,13 @@ interface ApprovalStep {
     can_delegate: boolean;
 }
 
-interface ApprovalPolicy {
+interface LocalApprovalPolicy {
     id?: string;
     name: string;
     module_code: string;
     entity_type: string;
     approval_mode: 'SEQUENTIAL' | 'PARALLEL';
-    steps: ApprovalStep[];
+    steps: LocalApprovalStep[];
     conditions: Array<{ field: string; operator: string; value: any }>;
     is_active: boolean;
 }
@@ -32,7 +32,7 @@ const MODULE_OPTIONS = [
 
 const CONDITION_OPERATORS = ['equals', 'not_equals', 'greater_than', 'less_than', 'contains'];
 
-const defaultPolicy = (): ApprovalPolicy => ({
+const defaultPolicy = (): LocalApprovalPolicy => ({
     name: '',
     module_code: '',
     entity_type: '',
@@ -42,7 +42,7 @@ const defaultPolicy = (): ApprovalPolicy => ({
     is_active: true,
 });
 
-const defaultStep = (order: number): ApprovalStep => ({
+const defaultStep = (order: number): LocalApprovalStep => ({
     step_order: order,
     approver_type: 'ROLE',
     approver_config: {},
@@ -52,11 +52,11 @@ const defaultStep = (order: number): ApprovalStep => ({
 
 export const ApprovalPoliciesPage = () => {
     const navigate = useNavigate();
-    const [policies, setPolicies] = useState<ApprovalPolicy[]>([]);
+    const [policies, setPolicies] = useState<LocalApprovalPolicy[]>([]);
     const [loading, setLoading] = useState(true);
     const [showForm, setShowForm] = useState(false);
     const [saving, setSaving] = useState(false);
-    const [form, setForm] = useState<ApprovalPolicy>(defaultPolicy());
+    const [form, setForm] = useState<LocalApprovalPolicy>(defaultPolicy());
     const [expandedPolicy, setExpandedPolicy] = useState<string | null>(null);
 
     useEffect(() => {
@@ -66,7 +66,7 @@ export const ApprovalPoliciesPage = () => {
     const loadPolicies = async () => {
         try {
             const res = await flowApi.getApprovalPolicies();
-            setPolicies(res.data || []);
+            setPolicies((res.data || []) as unknown as LocalApprovalPolicy[]);
         } catch {
             setPolicies([]);
         } finally {
@@ -93,7 +93,7 @@ export const ApprovalPoliciesPage = () => {
         }));
     };
 
-    const updateStep = (index: number, updates: Partial<ApprovalStep>) => {
+    const updateStep = (index: number, updates: Partial<LocalApprovalStep>) => {
         setForm(f => {
             const steps = [...f.steps];
             steps[index] = { ...steps[index], ...updates };
@@ -280,7 +280,7 @@ export const ApprovalPoliciesPage = () => {
                                         <label className="text-xs text-slate-500 mb-1 block">Approver Type</label>
                                         <select
                                             value={step.approver_type}
-                                            onChange={e => updateStep(i, { approver_type: e.target.value as ApprovalStep['approver_type'] })}
+                                            onChange={e => updateStep(i, { approver_type: e.target.value as LocalApprovalStep["approver_type"] })}
                                             className="w-full bg-slate-950 border border-slate-700 text-slate-100 px-3 py-1.5 rounded text-sm"
                                         >
                                             <option value="ROLE">Role</option>
@@ -383,7 +383,7 @@ export const ApprovalPoliciesPage = () => {
                             {expandedPolicy === policy.id && (
                                 <div className="border-t border-slate-800 p-4">
                                     <div className="space-y-2">
-                                        {(policy.steps || []).map((step: ApprovalStep) => (
+                                        {(policy.steps || []).map((step: LocalApprovalStep) => (
                                             <div key={step.step_order} className="flex items-center gap-4 bg-slate-900 rounded-lg p-3">
                                                 <span className="text-slate-500 text-xs w-14">Step {step.step_order}</span>
                                                 <span className="text-slate-300 text-sm flex-1">
