@@ -15,8 +15,11 @@ import type {
     CreateApprovalStepDto,
 } from '../types/flow';
 
+// Flow BE controller is @Controller('v1/flow'). Gateway strips the module prefix (/flow/)
+// so we must include /v1/flow in the path. In dev, proxy passes /v1/flow/* unchanged.
+const _flowGateway = (typeof window !== 'undefined' && (window as any).VITE_SO360_FLOW_API) || (import.meta as any).env?.VITE_SO360_FLOW_API;
 const api = axios.create({
-    baseURL: '/flow-api',
+    baseURL: _flowGateway ? `${_flowGateway}/v1/flow` : '/v1/flow',
 });
 
 // Interceptor to inject tenant/org/auth headers
