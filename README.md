@@ -69,12 +69,17 @@ These packages are shared with the Shell as singletons:
 - @so360/design-system
 - @so360/event-bus
 
-## Routes
+## Pages & Routes
 
 | Route | Component | Description |
 |-------|-----------|-------------|
-| `/flow` | FlowDashboard | Main flow listing |
-| `/flow/builder/:flowId` | FlowBuilder | Create/edit flow definition |
+| `/flow` | `FlowDashboard` | Main flow listing with active instance counts |
+| `/flow/builder/:flowId?` | `FlowBuilder` | Visual workflow designer — states, transitions, conditions |
+| `/flow/simulator` | `FlowSimulatorPage` | Flow simulator for testing definitions |
+| `/flow/instances` | `InstanceList` | Active flow instances with status filtering |
+| `/flow/instances/:id` | `InstanceViewer` | Instance detail — current state, history, available transitions |
+| `/flow/approvals` | `PendingApprovals` | Approval queue for current user; approve/reject/delegate |
+| `/flow/policies` | `ApprovalPoliciesPage` | Approval policy management (admin) |
 
 ## API Integration
 
